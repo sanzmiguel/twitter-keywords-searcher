@@ -12,7 +12,7 @@ async function connect () {
       requestTimeout: 600000,
       ConnectionPool,
       log: 'trace',
-      node: 'http://localhost:9200'
+      node: process.env.ELASTIC_HOST
     });
     await client.ping();
   } catch (error) {
