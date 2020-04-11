@@ -1,6 +1,6 @@
 const { Client, ConnectionPool } = require('@elastic/elasticsearch');
 
-const { logger } = require('../lib');
+const logger = require('./logger');
 
 let client;
 
@@ -21,11 +21,6 @@ async function connect () {
   }
 }
 
-function getClient () {
-  return client;
-}
-
 module.exports = {
-  connect,
-  getClient
+  connect
 };

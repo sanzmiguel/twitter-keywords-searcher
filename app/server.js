@@ -6,15 +6,19 @@ const { errorHandler } = require('./middlewares');
 const routes = require('./routes');
 const {
   kafka: { connect: kafkaConnect },
-  elastic: { connect: elasticConnect }
-} = require('./infra');
+  elastic: { connect: elasticConnect },
+  twitter: { connect: twitterConnect }
+} = require('./lib');
 
 const PORT = 3000;
 
 (async () => {
   const app = createServer();
-  await kafkaConnect();
-  await elasticConnect();
+  await Promise.all([
+    kafkaConnect(),
+    elasticConnect()
+  ]);
+  twitterConnect();
   app.listen(PORT);
   logger.info(`Server listening in port ${PORT}`);
 })();

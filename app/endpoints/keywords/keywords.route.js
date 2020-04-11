@@ -9,7 +9,7 @@ const router = Router();
 
 async function addKeywordsSearch (req, res, next) {
   const { keyword } = req.body;
-  twitterDomain.addKeywordsSearch(keyword);
+  await twitterDomain.addKeywordsSearch(keyword);
   res.status(NO_CONTENT).send();
   next();
 }

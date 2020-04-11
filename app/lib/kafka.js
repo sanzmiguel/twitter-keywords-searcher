@@ -1,6 +1,6 @@
 const { Kafka } = require('kafkajs');
 
-const { logger } = require('../lib');
+const logger = require('./logger');
 
 let kafka;
 
@@ -14,8 +14,7 @@ async function connect () {
 }
 
 async function _createTopic () {
-  const client = getClient();
-  const admin = client.admin();
+  const admin = kafka.admin();
   const topicName = 'twitter-keywords';
 
   await admin.createTopics({
@@ -28,11 +27,6 @@ async function _createTopic () {
   logger.info(`Created topic with the name ${topicName}`);
 }
 
-function getClient () {
-  return kafka;
-}
-
 module.exports = {
-  connect,
-  getClient
+  connect
 };
