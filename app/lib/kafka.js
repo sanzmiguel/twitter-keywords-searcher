@@ -2,6 +2,8 @@ const { Kafka } = require('kafkajs');
 
 const logger = require('./logger');
 
+const { unserializeFromKafka } = require('../dto/tweets');
+
 let kafka;
 
 async function connect () {
@@ -11,6 +13,7 @@ async function connect () {
     brokers: [process.env.KAFKA_HOST]
   });
   await _createTopic();
+  await _createConsumer();
 }
 
 async function _createTopic () {
@@ -27,18 +30,28 @@ async function _createTopic () {
   logger.info(`Created topic with the name ${topicName}`);
 }
 
-async function sendToTopic (message, key) {
+async function _createConsumer () {
+  const consumer = kafka.consumer({ groupId: process.env.KAFKA_GROUP_ID });
+  await consumer.connect();
+
+  await consumer.subscribe({ topic: process.env.KAFKA_TOPIC_NAME });
+
+  await consumer.run({
+    eachMessage: async ({ message }) => {
+      const value = unserializeFromKafka(message.value.toString());
+      console.log('value', value);
+    }
+  });
+}
+
+async function sendToTopic (messages) {
   const producer = kafka.producer();
   await producer.connect();
 
-  try {
-    await producer.send({
-      topic: process.env.KAFKA_TOPIC_NAME,
-      messages: [{ key, value: JSON.stringify(message) }]
-    });
-  } catch (error) {
-    console.log(error);
-  }
+  await producer.send({
+    topic: process.env.KAFKA_TOPIC_NAME,
+    messages
+  });
 }
 
 module.exports = {
