@@ -4,11 +4,17 @@ const bodyParser = require('body-parser');
 const { logger } = require('./lib');
 const { errorHandler } = require('./middlewares');
 const routes = require('./routes');
+const {
+  kafka: { connect: kafkaConnect },
+  elastic: { connect: elasticConnect }
+} = require('./infra');
 
 const PORT = 3000;
 
 (async () => {
   const app = createServer();
+  await kafkaConnect();
+  await elasticConnect();
   app.listen(PORT);
   logger.info(`Server listening in port ${PORT}`);
 })();

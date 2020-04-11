@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const { NO_CONTENT } = require('http-status');
 
-const twitterDomain = require('./twitter.domain');
+const twitterDomain = require('./keywords.domain');
 const { schemaValidator } = require('../../middlewares');
 const { addKeywordsSearch: addKeywordsSearchValidator } = require('./validators');
 
@@ -15,7 +15,7 @@ async function addKeywordsSearch (req, res, next) {
 }
 
 router.post(
-  '/add-keywords-search',
+  '/add-search',
   schemaValidator([
     { path: 'body', schema: addKeywordsSearchValidator }
   ]),

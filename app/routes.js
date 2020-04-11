@@ -1,9 +1,9 @@
 const { Router } = require('express');
 
-const twitterRoute = require('./endpoints/twitter/twitter.route');
+const keywordsRoute = require('./endpoints/keywords/keywords.route');
 
 const router = Router();
 
-router.use('/api/twitter', twitterRoute);
+router.use('/api/keywords', keywordsRoute);
 
 module.exports = router;
