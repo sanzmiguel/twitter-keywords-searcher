@@ -54,7 +54,7 @@ async function sendToTopic (messages) {
     await producer.send({
       topic: process.env.KAFKA_TOPIC_NAME,
       messages,
-      compression: CompressionTypes.GZIP
+      compression: CompressionTypes.Snappy
     });
   } catch (error) {
     const { message, code, status } = errorsList.INTERNAL_SERVER_ERROR;
