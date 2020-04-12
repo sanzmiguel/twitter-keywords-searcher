@@ -1,4 +1,4 @@
-const { Kafka } = require('kafkajs');
+const { Kafka, CompressionTypes } = require('kafkajs');
 
 const logger = require('./logger');
 const { tweetsConsumer } = require('../consumers');
@@ -53,7 +53,8 @@ async function sendToTopic (messages) {
 
     await producer.send({
       topic: process.env.KAFKA_TOPIC_NAME,
-      messages
+      messages,
+      compression: CompressionTypes.GZIP
     });
   } catch (error) {
     const { message, code, status } = errorsList.INTERNAL_SERVER_ERROR;
