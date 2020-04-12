@@ -11,6 +11,11 @@ const errorBuilder = () => {
       code: getCode(httpStatus.BAD_REQUEST),
       status: httpStatus.BAD_REQUEST,
       message: httpStatus[messageKey(httpStatus.BAD_REQUEST)]
+    },
+    INTERNAL_SERVER_ERROR: {
+      code: getCode(httpStatus.INTERNAL_SERVER_ERROR),
+      status: httpStatus.INTERNAL_SERVER_ERROR,
+      message: httpStatus[messageKey(httpStatus.INTERNAL_SERVER_ERROR)]
     }
   };
 

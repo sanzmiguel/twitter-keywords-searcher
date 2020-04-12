@@ -2,6 +2,8 @@ const { Kafka } = require('kafkajs');
 
 const logger = require('./logger');
 const { tweetsConsumer } = require('../consumers');
+const AppError = require('./app-error');
+const { errors: errorsList } = require('../config');
 
 let kafka;
 
@@ -45,13 +47,18 @@ async function _createConsumer () {
 }
 
 async function sendToTopic (messages) {
-  const producer = kafka.producer();
-  await producer.connect();
+  try {
+    const producer = kafka.producer();
+    await producer.connect();
 
-  await producer.send({
-    topic: process.env.KAFKA_TOPIC_NAME,
-    messages
-  });
+    await producer.send({
+      topic: process.env.KAFKA_TOPIC_NAME,
+      messages
+    });
+  } catch (error) {
+    const { message, code, status } = errorsList.INTERNAL_SERVER_ERROR;
+    throw new AppError(message, code, status, { error });
+  }
 }
 
 module.exports = {

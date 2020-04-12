@@ -8,10 +8,14 @@ const { addKeywordsSearch: addKeywordsSearchValidator } = require('./validators'
 const router = Router();
 
 async function addKeywordsSearch (req, res, next) {
-  const { keyword } = req.body;
-  await twitterDomain.addKeywordsSearch(keyword);
-  res.status(NO_CONTENT).send();
-  next();
+  try {
+    const { keyword } = req.body;
+    await twitterDomain.addKeywordsSearch(keyword);
+    res.status(NO_CONTENT).send();
+    next();
+  } catch (error) {
+    next(error);
+  }
 }
 
 router.post(

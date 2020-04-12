@@ -17,7 +17,6 @@ async function connect () {
       node: process.env.ELASTIC_HOST
     });
     await client.ping();
-    await _deleteTweetsIndex();
     await _createTweetsIndex();
   } catch (error) {
     logger.error(`The connection with elastic did not work: ${error}`);
@@ -26,24 +25,18 @@ async function connect () {
 }
 
 async function _createTweetsIndex () {
-  logger.info('Creating tweets index in ElasticServer');
-  const { mappings, settings } = tweetsMapping;
-  const options = {
-    index: process.env.ELASTIC_TWEETS_INDEX_NAME,
-    body: { mappings, settings }
-  };
-  const { indices } = client;
-
-  await indices.create(options);
-}
-
-async function _deleteTweetsIndex () {
   try {
-    logger.info('Deleting tweets index in ElasticSearch');
+    logger.info('Creating tweets index in ElasticServer');
+    const { mappings, settings } = tweetsMapping;
+    const options = {
+      index: process.env.ELASTIC_TWEETS_INDEX_NAME,
+      body: { mappings, settings }
+    };
     const { indices } = client;
-    await indices.delete({ index: process.env.ELASTIC_TWEETS_INDEX_NAME });
+
+    await indices.create(options);
   } catch (error) {
-    logger.error('Error deleting tweets index in ElasticSearcg');
+    logger.error(`Error creating index in ElasticSearch: ${error}`);
   }
 }
 
