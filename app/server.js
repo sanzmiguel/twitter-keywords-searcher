@@ -6,21 +6,26 @@ const { errorHandler } = require('./middlewares');
 const routes = require('./routes');
 const {
   kafka: { connect: kafkaConnect },
-  elastic: { connect: elasticConnect },
   twitter: { connect: twitterConnect }
 } = require('./lib');
+const { connect: elasticConnect } = require('./repository/elastic');
 
 const PORT = 3000;
 
 (async () => {
-  const app = createServer();
-  await Promise.all([
-    kafkaConnect(),
-    elasticConnect()
-  ]);
-  twitterConnect();
-  app.listen(PORT);
-  logger.info(`Server listening in port ${PORT}`);
+  try {
+    const app = createServer();
+    await Promise.all([
+      kafkaConnect(),
+      elasticConnect()
+    ]);
+    twitterConnect();
+    app.listen(PORT);
+    logger.info(`Server listening in port ${PORT}`);
+  } catch (error) {
+    logger.error('An error has occurred. Server is disconnecting', error);
+    process.exit(-1);
+  }
 })();
 
 function createServer () {

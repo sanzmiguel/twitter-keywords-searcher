@@ -1,0 +1,89 @@
+{
+  "index": "",
+  "body": {
+    "settings": {
+      "analysis": {
+        "analyzer": {
+          "ngram_analyzer": {
+            "tokenizer": "standard",
+            "filter": [
+              "lowercase",
+              "edge_ngram_filter",
+              "my_ascii_folding"
+            ]
+          },
+          "ngram_search_analyzer": {
+            "tokenizer": "standard",
+            "filter": [
+              "lowercase"
+            ]
+          },
+          "ascii_analyzer": {
+            "tokenizer": "standard",
+            "filter": [
+              "lowercase",
+              "my_ascii_folding"
+            ]
+          }
+        },
+        "filter": {
+          "edge_ngram_filter": {
+            "type": "edge_ngram",
+            "min_gram": 1,
+            "max_gram": 20
+          },
+          "my_ascii_folding": {
+            "type": "asciifolding",
+            "preserve_original": true
+          }
+        }
+      }
+    },
+    "mappings": {
+      "tweets": {
+        "properties": {
+          "tweeet": {
+            "type": "text"
+          },
+          "lang": {
+            "type": "text"
+          },
+          "createdAt": {
+            "type": "date"
+          },
+          "userName": {
+            "type": "text",
+            "analyzer": "ascii_analyzer",
+            "search_analyzer": "ascii_analyzer",
+            "fielddata": true,
+            "fields":
+              {
+                "keyword": {
+                  "type": "keyword"
+                },
+                "suggest": {
+                  "type": "completion",
+                  "preserve_separators": false,
+                  "analyzer": "ascii_analyzer",
+                  "search_analyzer": "ascii_analyzer"
+                }
+              }
+          },
+          "userDescription": {
+            "type": "text",
+            "analyzer": "ascii_analyzer",
+            "search_analyzer": "ascii_analyzer",
+            "fields": {
+              "suggest": {
+                "type": "completion",
+                "preserve_separators": false,
+                "analyzer": "ascii_analyzer",
+                "search_analyzer": "ascii_analyzer"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

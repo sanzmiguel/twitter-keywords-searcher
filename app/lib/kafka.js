@@ -1,8 +1,7 @@
 const { Kafka } = require('kafkajs');
 
 const logger = require('./logger');
-
-const { unserializeFromKafka } = require('../dto/tweets');
+const { tweetsConsumer } = require('../consumers');
 
 let kafka;
 
@@ -37,10 +36,11 @@ async function _createConsumer () {
   await consumer.subscribe({ topic: process.env.KAFKA_TOPIC_NAME });
 
   await consumer.run({
-    eachMessage: async ({ message }) => {
-      const value = unserializeFromKafka(message.value.toString());
-      console.log('value', value);
-    }
+    eachMessage: tweetsConsumer
+  });
+
+  process.on('SIGTERM', async () => {
+    await consumer.disconnect();
   });
 }
 
