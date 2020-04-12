@@ -10,7 +10,7 @@ const {
 } = require('./lib');
 const { connect: elasticConnect } = require('./repository/elastic');
 
-const PORT = 3000;
+const PORT = process.env.PORT;
 
 (async () => {
   try {
