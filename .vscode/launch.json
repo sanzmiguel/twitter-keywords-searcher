@@ -10,8 +10,7 @@
       "name": "Iniciar programa",
       "program": "${workspaceRoot}/app/server.js",
       "console": "integratedTerminal",
-      "envFile": "${workspaceFolder}/.env",
-      "runtimeVersion": "12.14.0"
+      "envFile": "${workspaceFolder}/.env"
     }
   ]
 }
